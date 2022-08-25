@@ -1,0 +1,285 @@
+---
+title: "r4ds2 lesson 1"
+author: "Phanikumar S Tata"
+format: html
+incremental: true
+title-slide-attributes: 
+  data-background-size: cover
+editor: visual
+footer: BCD1RLG (Bayer CD1 R Learning Group)
+---
+
+# R for data science  book
+
+![](img/cover.png)
+
+# Introduction
+
+
+The Introduction gives an overview of what the book covers. **Learning objectives:**
+
+-   Describe a **typical data science project.**
+-   Explain the reasoning behind the **order of content in this book.**
+-   Recognize topics that are explicitly **not covered by this book.**
+-   **Set up an environment** in which you can learn the topics in this book.
+
+## Introduction
+
+-   Describe how **code in the book** differs from **code in your console.**
+-   Recall ways to **get help with R code.**
+    -   Produce a minimal reproducible example or **reprex.**
+
+# The order of content in this book
+
+-   Import & Tidy are boring, so we jump to **visualization & transformation.**
+-   After that we learn to **wrangle (import & tidy) data,** because that is a necessary skill.
+-   Those baseline skills enables us to start **programming.** Learning to program helps us simplify the other steps.
+-   We might then get into **modeling** and **communicating,** or we might pick those up in other books
+
+# The order of BCD1RLG would read for this
+
+-   we will jump to **Import & Tidy.**
+-   After that we learn to **wrangle (import & tidy) data,** because that is a necessary skill.
+-   Then to **visualization & transformation.**
+-   Those baseline skills enables us to start **programming.** Learning to program helps us simplify the other steps.
+
+## Not covered by this book
+
+-   **Big data:** Working with big data is problem-specific. If you need to work with big data, other tools will be useful to learn.
+-   **Python, Julia, etc:** This book focuses on R. Master one tool at a time, but maybe go on to other tools later.
+-   **Non-rectangular data:** Honestly even a lot of things that aren't naturally table-like can be coerced to be table-like, so it makes sense to start with tables.
+-   **Hypothesis confirmation:** This book focuses on exploratory data analysis.
+
+## Setting up an environment
+
+We'll need:
+
+-   **R**
+-   **Rstudio**
+-   The **tidyverse** (`install.packages("tidyverse")`)
+-   Three **additional packages** (`install.packages(c("nycflights13", "gapminder", "Lahman"))`)
+
+## Running R code
+
+::: {.callout-caution collapse="true"}
+### Tip With Caption
+
+Code in the book has some slight differences from code on your console. Don't freak out.
+:::
+
+::: {.callout-note collapse="true"}
+## Getting help
+
+-   **Pay attention to error messages.**
+    -   tidyverse error messages tend to actually be helpful.
+    -   If you can't figure out what an error is telling you, copy/paste it into Google.
+-   **Stackoverflow.com** *can* be helpful, but beware.
+-   **r4ds.io/join** is a friendly Slack community with volunteer R tutors.
+-   When you ask for help, make a **reprex** if possible.
+    -   State up front what **packages** you use (we'll learn about loading packages very soon).
+    -   Provide (a subset of) any data you use with `dput()`.
+    -   Make sure your code is **easy to read.** Use clean spacing, clear variable names, and comments.
+-   [#rstats](https://twitter.com/search?q=%23rstats) twitter is super active and surprisingly friendly.
+:::
+
+## Meeting Videos
+
+### Cohort 5
+
+`r knitr::include_url("https://www.youtube.com/embed/BtRTkChZo8c")`
+
+# Workflow: basics
+
+**Learning objectives:**
+
+-   Understand the **RStudio** interface
+-   Use the R **command line** boldly
+-   Follow good **style conventions** when writing code
+-   Confidently call **functions** in R
+
+## The Console Pane
+
+![](img/console_pane.png) \## The Script Pane {.unlisted .unnumbered}
+
+![](img/script_pane.png)
+
+## The Environment Pane {.unlisted .unnumbered}
+
+![](img/environment_pane.png)
+
+## The Other Pane {.unlisted .unnumbered}
+
+![](img/files_pane.png)
+
+## Using the Console {.unlisted .unnumbered}
+
+Conceptually, everything we do in R is a series of commands. The console is where we can enter these commands.
+
+By default, entering `<thing>` means "print out `<thing>`."
+
+```{r 03-01,echo=TRUE}
+4
+```
+
+## Using the Console {.unlisted .unnumbered}
+
+R has some pre-defined named objects:
+
+```{r 03-02,echo=TRUE}
+pi
+```
+
+This one is surprisingly useful:
+
+```{r 03-03,echo=TRUE}
+letters
+```
+
+## Using the Console {.unlisted .unnumbered}
+
+What it means to "print out" a thing depends on what kind of thing it is.
+
+```{r 03-05,echo=TRUE}
+ggplot2::diamonds
+```
+
+## Using the Console {.unlisted .unnumbered}
+
+```{r 03-005,echo=TRUE}
+mtcars 
+```
+
+## Using the Console {.unlisted .unnumbered}
+
+```{r 03-0005,echo=TRUE}
+carlinfo <-  datasets::mtcars
+# Printing the first 6 ROWS using head() or last by tail()
+head(carlinfo)
+
+tail(carlinfo)
+
+```
+
+## Using the Console {.unlisted .unnumbered}
+
+Actually, entering `<thing>` really means "**evaluate** and print `<thing>`."
+
+```{r 03-06,echo=TRUE}
+cos(pi)
+```
+
+I use R as a desktop calculator a lot.
+
+```{r 03-07,echo=TRUE}
+60*60*24
+```
+
+## Assigning Names {.unlisted .unnumbered}
+
+Sometimes you don't just want to print out a thing, especially if it's a complex evaluation. You want to save it to a named object so that you can do more stuff with it. Use the assignment arrow (`<-`) for this.
+
+```{r 03-08,echo=TRUE}
+tau <- 2*pi
+```
+
+Most programming languages use the equals sign (`=`) for assignment, and this also works in R. But assignment is really a conceptually distinct thing from mathematical equality, so it makes sense to use a different symbol. It's a bit more annoying to type, though, so get used to the keyboard shortcut **Alt+minus**.
+
+## Envirnoment panel
+
+Objects that you have named will show up in the "Environment" panel.
+
+![You can View Objects created either in R or Python double click to open a Tibble or data frame](img/envir.png){fig-alt="R" width="418"}
+
+## Assigning and Printing {.unlisted .unnumbered}
+
+By default, when you make an assignment, the result of the evaluation **is not** printed in the console. To assign **and** print in one command, surround the assignment with parentheses:
+
+```{r 03-09,echo=TRUE}
+(tau <- 2*pi)
+```
+
+# 
+
+::: {.callout-note collapse="true"}
+# Naming Things
+
+<font size="4"> *There are only two hard things in computer science: cache invalidation and naming things. And off-by-one errors.* </font>
+
+-   Picking good names for things is both harder and more important than you might guess.
+-   Having good guidelines for naming things can save you a lot of mental effort down the road.
+-   Names in R can only contain letters, numbers, `_`, and `.`.
+-   R is case-sensitive! And it can't read your mind.
+-   Sticking with a good style convention will make your code more readable, both for others, and for yourself in the future.
+:::
+
+# 
+
+::: {.callout-important collapse="true"}
+Some suggestions:
+
+-   Use descriptive names. Long names are ok!
+-   Use all lowercase by default, with `_` as a separator.
+    -   `student_item_data`
+    -   `num_students`
+    -   `fall2020_math_courses_with_multiple_sections`
+:::
+
+## Functions
+
+A function in R is like a function in math: it's a box that takes in input and returns output.[^1]
+
+[^1]: Functions may also have *side effects*, which is something we can talk about later.
+
+Functions can take zero, one, or more than one object as input. When you *call* a function, you specify values (*arguments*) for the inputs. Evaluating the function call gives the output of the function.
+
+## Functions (Cont..) {.unlisted .unnumbered}
+
+```{r 03-10,echo=TRUE }
+length(letters)
+```
+
+Or:
+
+```{r 03-12,echo=TRUE }
+nrow(ggplot2::diamonds) 
+```
+
+The inputs (the function *parameters*) have names. When you pass in the function arguments, you can do so by name:
+
+```{r 03-13,echo=TRUE }
+seq(from = 1, to = 10)
+```
+
+## Functions (Cont..) {.unlisted .unnumbered}
+
+Specifying names is (usually) optional, but it can make your code more readable, so it's a good habit to get into. If you name the arguments, it doesn't matter what order you put them in:
+
+```{r 03-14,echo=TRUE }
+seq(to = 10, from = 1)
+```
+
+If you don't specify names, the function matches the arguments to the parameters in the order they appear in the function definition.
+
+```{r 03-15,echo=TRUE }
+seq(10, 1)
+```
+
+# 
+
+::: {.callout-note collapse="true"}
+## Other RStudio Features {.unlisted .unnumbered}
+
+Explore on your own:
+
+-   tab autocomplete
+-   up-arrow to see console history
+-   type, then command- (control-) up-arrow to search history
+-   alt-shift-k to see lots of shortcuts
+-   one of my recent favorites: alt-command-down-arrow (inside a script)
+:::
+
+## Meeting Videos
+
+### Cohort 5
+
+`r knitr::include_url("https://www.youtube.com/embed/nQnMm6kyJbE")`
